@@ -6,7 +6,7 @@ class Pipe {
     this.y_top = this.bound;
     this.y_bottom = this.bound + this.space;
     this.wide = 100  ;
-    this.speed = 1.5;
+    this.speed = 0;
     this.pipe_top=new Image();
     this.pipe_bottom=new Image();
     this.pipe_top.src="pipe_top.png";
@@ -21,7 +21,7 @@ class Pipe {
     this.x -= this.speed;
   }
   randPos() {
-    var space = Math.random() * (height - 150);
+    var space = Math.random() * (500 - 150);
     if (space < 50) {
       space = 50;
     }

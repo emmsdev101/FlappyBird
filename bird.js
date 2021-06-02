@@ -1,6 +1,6 @@
 class Bird{
   constructor(){
-    this.x=80;
+    this.x=window.innerWidth/2-45;
     this.y=width/2;
     this.width=45;
     this.height=35;

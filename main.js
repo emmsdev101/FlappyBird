@@ -1,6 +1,5 @@
 var bird;
 var pipes=[];
-
 var canvas;
 var height=0;
 var width=0;
@@ -13,6 +12,7 @@ var clouds=[];
 var grounds=[];
 var game_over=false;
 var ground_alt = 500
+var game_speed = 1
 
 /* window.onload function makes sure that the html document
 is fully loaded to cliet's browser before running our game. */
@@ -50,7 +50,7 @@ function initWindow(){
   // context holds the object for drawing operations in canvas.
   height = window.innerHeight
   if (window.innerWidth>700){
-    width = 700
+    width = window.innerWidth
   }else {
     width = window.innerWidth
   }
@@ -71,6 +71,10 @@ function setupClouds(){
       cloud2.load();
       cloud2.x=cloud1.x+cloud1.width;
       clouds.push(cloud2);
+      var cloud3=new Background();
+      cloud3.load();
+      cloud3.x=cloud2.x+cloud2.width;
+      clouds.push(cloud3);
 
     }
   function setupGround() {
@@ -86,6 +90,10 @@ function setupClouds(){
      ground2.load();
     ground2.x = ground1.x + ground1.width;
     grounds.push(ground2);
+    var ground3 = new Ground();
+     ground3.load();
+    ground3.x = ground2.x + ground2.width;
+    grounds.push(ground3);
   
   }
       
@@ -137,7 +145,7 @@ function update(){
     counter=0;
   }
   // we constantly adding pipe with random distance from neighboring pipes.
-  if(counter>(Math.random()*300)+150){
+  if(counter>(Math.random(new Date().getTime)*500)+200){
     getPipe();
     counter=0;
   }
@@ -166,7 +174,7 @@ function detectCollision(){
   // this checks if bird collided with pipe or collided the top or fell down, then game over.
   
   if (bird.x + bird.width - 5 >= p.x && bird.x+20<=p.x+p.wide&&
-    (bird.y -bird.height + 38 <= p.y_top || bird.y + bird.height - 5 >= p.y_bottom) || (bird.y <= 0 || bird.y + bird.height >= ground_alt)) {
+    (bird.y + bird.height <= p.y_top || bird.y + bird.height - 5 >= p.y_bottom) || (bird.y <= 0 || bird.y + bird.height >= ground_alt)) {
       game_over=true;
   }
 }
@@ -174,10 +182,12 @@ function getPipe(){
   // for getting a pipe.
   if(pipes.length==0){
     var pipe=new Pipe();
+    pipe.speed =  game_speed 
     pipe.x=width; // make the pipe's initial position as the edge of the screen.
     pipes.push(pipe); // adding to the list of pipes.
   }else{
     var pipe = new Pipe();
+    pipe.speed =  game_speed
     pipes.push(pipe);
   }
   
@@ -220,11 +230,11 @@ class Background{
     this.x=0;
     this.width=400;
     this.height=500;
-    this.speed=.1;
+    this.speed=game_speed*.1;
   }
   load(){
     this.sky = new Image();
-    this.sky.src = "sky.png";
+   // this.sky.src = "sky.png";
     
   }
   draw(ctx){
@@ -241,10 +251,10 @@ class Ground{
   constructor(){
     this.ground;
     this.y=500;
-    this.x=0
+    this.x=0; 
     this.width=600;
     this.height=500;
-    this.speed=1;
+    this.speed=game_speed;
   }
   load(){
     this.ground=new Image();
@@ -256,7 +266,7 @@ class Ground{
   update(){
     this.x-=this.speed;
     if(this.x+this.width<=0){
-      this.x=this.width;
+      this.x=window.innerWidth;
     }
   }
 }
